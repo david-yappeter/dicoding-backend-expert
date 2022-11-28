@@ -12,6 +12,11 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "linebreak-style": "off"
+        "function-paren-newline": "off",
+        "implicit-arrow-linebreak": "off",
+        "class-methods-use-this": "off",
+        "no-underscore-dangle": "off",
+        "linebreak-style": "off",
+        "comma-dangle": "off"
     }
 }

@@ -1,4 +1,4 @@
-const isNumber = (v) => typeof v === 'number';
+const { isNumber } = require('./utils/number');
 
 const MathBasic = {
   add: (...args) => {
