@@ -1,4 +1,4 @@
-const { isNotString } = require('@utils/type');
+const { isNotString } = require('../../../utils/type');
 
 class RegisterThread {
   constructor(payload) {

@@ -2,16 +2,16 @@
 
 function makeModuleNameMapper(rootPath, jsConfigPath) {
   // Get paths from tsconfig
-  const { paths } = require(jsConfigPath).compilerOptions;
+  // const { paths } = require(jsConfigPath).compilerOptions;
 
   const aliases = {};
 
   // Iterate over paths and convert them into moduleNameMapper format
-  Object.keys(paths).forEach((item) => {
-    const key = item.replace('/*', '/(.*)');
-    const path = paths[item][0].replace('/*', '/$1');
-    aliases[key] = `${rootPath}/${path}`;
-  });
+  // Object.keys(paths).forEach((item) => {
+  //   const key = item.replace('/*', '/(.*)');
+  //   const path = paths[item][0].replace('/*', '/$1');
+  //   aliases[key] = `${rootPath}/${path}`;
+  // });
   return aliases;
 }
 

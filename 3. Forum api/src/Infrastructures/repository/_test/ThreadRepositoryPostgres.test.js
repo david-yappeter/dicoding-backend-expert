@@ -1,8 +1,8 @@
-const RegisteredThread = require('@Domains/threads/entities/RegisteredThread');
-const RegisterThread = require('@Domains/threads/entities/RegisterThread');
-const ThreadTableTestHelper = require('@rootTests/ThreadTableTestHelper');
-const pool = require('../../database/postgres/pool');
+const RegisteredThread = require('../../../Domains/threads/entities/RegisteredThread');
+const RegisterThread = require('../../../Domains/threads/entities/RegisterThread');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
+const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
+const pool = require('../../database/postgres/pool');
 
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {

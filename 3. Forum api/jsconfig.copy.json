@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "target": "ES6",
+        "baseUrl": "./src",
+        "paths": {
+            "@utils/*": ["./utils/*"],
+            "@Domains/*": ["./Domains/*"],
+            "@exceptions/*": ["./Commons/exceptions/*"],
+            "@Applications/*": ["./Applications/*"],
+            "@Infrastructures/*": ["./Infrastructures/*"],
+            "@Interfaces/*": ["./Interfaces/*"]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}

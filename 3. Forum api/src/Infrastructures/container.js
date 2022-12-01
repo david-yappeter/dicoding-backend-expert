@@ -24,8 +24,8 @@ const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRep
 const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
 const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
-const ThreadRepository = require('@Domains/threads/ThreadRepository');
-const AddThreadUseCase = require('@Applications/use_case/AddThreadUseCase');
+const ThreadRepository = require('../Domains/threads/ThreadRepository');
+const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
 
 // creating container
 const container = createContainer();

@@ -1,7 +1,7 @@
-const RegisteredThread = require('@Domains/threads/entities/RegisteredThread');
-const ThreadRepository = require('@Domains/threads/ThreadRepository');
+const RegisteredThread = require('../../../Domains/threads/entities/RegisteredThread');
+const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+const RegisterThread = require('@../../../Domains/threads/entities/RegisterThread');
 const AddThreadUseCase = require('../AddThreadUseCase');
-const RegisterThread = require('@Domains/threads/entities/RegisterThread');
 
 describe('AddUserUseCase', () => {
   /**

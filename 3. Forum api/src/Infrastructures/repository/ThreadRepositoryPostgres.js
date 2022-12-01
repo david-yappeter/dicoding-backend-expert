@@ -1,5 +1,5 @@
-const RegisteredThread = require('@Domains/threads/entities/RegisteredThread');
-const ThreadRepository = require('@Domains/threads/ThreadRepository');
+const RegisteredThread = require('../../Domains/threads/entities/RegisteredThread');
+const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
   constructor(pool, idGenerator) {

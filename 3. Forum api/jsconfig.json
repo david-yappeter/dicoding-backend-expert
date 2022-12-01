@@ -3,15 +3,7 @@
         "module": "CommonJS",
         "moduleResolution": "Node",
         "target": "ES6",
-        "baseUrl": "./src",
-        "paths": {
-            "@utils/*": ["./utils/*"],
-            "@Domains/*": ["./Domains/*"],
-            "@exceptions/*": ["./Commons/exceptions/*"],
-            "@Applications/*": ["./Applications/*"],
-            "@Infrastructures/*": ["./Infrastructures/*"],
-            "@Interfaces/*": ["./Interfaces/*"]
-        }
+        "baseUrl": "./src"
     },
     "exclude": [
         "node_modules",
