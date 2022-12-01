@@ -18,6 +18,7 @@ describe('a RegisterThread entities', () => {
     const payload = {
       title: true,
       body: 'abc',
+      owner: 123,
     };
 
     // Action and Assert
@@ -31,6 +32,7 @@ describe('a RegisterThread entities', () => {
     const payload = {
       title: 'Dicoding Indonesia',
       body: 'abc',
+      owner: 'user-12123',
     };
 
     // Action

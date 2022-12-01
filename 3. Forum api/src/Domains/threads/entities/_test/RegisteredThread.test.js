@@ -19,6 +19,7 @@ describe('a RegisteredThread entities', () => {
       id: 123,
       title: true,
       body: 'abc',
+      owner: 123,
     };
 
     // Action and Assert
@@ -33,6 +34,7 @@ describe('a RegisteredThread entities', () => {
       id: 'thread-99sdb9hg09ersgh90ers',
       title: 'Dicoding Indonesia',
       body: 'abc',
+      owner: 'user-ejiwag12',
     };
 
     // Action

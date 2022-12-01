@@ -6,6 +6,9 @@ class AddThreadUseCase {
   }
 
   async execute(useCasePayload) {
+    if (!useCasePayload) {
+      throw new Error('REQUEST_PAYLOAD.NULL');
+    }
     const registerThread = new RegisterThread(useCasePayload);
     return this._threadRepository.addThread(registerThread);
   }

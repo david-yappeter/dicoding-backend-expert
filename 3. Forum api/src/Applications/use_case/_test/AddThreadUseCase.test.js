@@ -12,11 +12,13 @@ describe('AddUserUseCase', () => {
     const useCasePayload = {
       title: 'dicoding title',
       body: 'dicoding body',
+      owner: 'user-123',
     };
     const expectedRegisteredThread = new RegisteredThread({
       id: 'thread-123',
       title: useCasePayload.title,
       body: useCasePayload.body,
+      owner: 'user-123',
     });
 
     /** creating dependency of use case */
@@ -41,6 +43,7 @@ describe('AddUserUseCase', () => {
       new RegisterThread({
         title: useCasePayload.title,
         body: useCasePayload.body,
+        owner: useCasePayload.owner,
       })
     );
   });
