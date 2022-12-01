@@ -1,0 +1,25 @@
+const ThreadCommentRepository = require('../../Domains/thread-comments/ThreadCommentRepository');
+
+class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
+  constructor(pool, idGenerator) {
+    super();
+    this._pool = pool;
+    this._idGenerator = idGenerator;
+  }
+
+  async addThread(registerThread) {
+    const { title, body, owner } = registerThread;
+    const id = `thread-${this._idGenerator()}`;
+
+    const query = {
+      text: 'INSERT INTO threads VALUES($1, $2, $3, $4) RETURNING id, title, body, owner',
+      values: [id, title, body, owner],
+    };
+
+    const result = await this._pool.query(query);
+
+    return new RegisteredThread({ ...result.rows[0] });
+  }
+}
+
+module.exports = ThreadCommentRepositoryPostgres;
