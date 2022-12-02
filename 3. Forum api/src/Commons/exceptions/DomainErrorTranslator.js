@@ -40,6 +40,14 @@ DomainErrorTranslator._directories = {
   'REGISTER_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     'tidak dapat membuat thread baru karena tipe data tidak sesuai'
   ),
+  'REGISTER_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
+    'tidak dapat membuat comment baru karena properti yang dibutuhkan tidak ada'
+  ),
+  'REGISTER_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION':
+    new InvariantError(
+      'tidak dapat membuat comment baru karena tipe data tidak sesuai'
+    ),
+
   'REQUEST_PAYLOAD.NULL': new InvariantError('payload tidak boleh null'),
 };
 

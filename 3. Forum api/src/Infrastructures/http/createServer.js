@@ -5,12 +5,13 @@ const ClientError = require('../../Commons/exceptions/ClientError');
 const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
 const users = require('../../Interfaces/http/api/users');
 const thread = require('../../Interfaces/http/api/thread');
+const threadComment = require('../../Interfaces/http/api/thread-comments');
 const authentications = require('../../Interfaces/http/api/authentications');
 
 const createServer = async (container) => {
   const server = Hapi.server({
     host: process.env.HOST,
-    port: process.env.PORT,
+    port: process.env.PORT || process.env.APP_PORT || 5000,
   });
 
   await server.register([{ plugin: Jwt }, { plugin: Inert }]);
@@ -45,6 +46,10 @@ const createServer = async (container) => {
       plugin: thread,
       options: { container },
     },
+    {
+      plugin: threadComment,
+      options: { container },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -69,6 +74,8 @@ const createServer = async (container) => {
       if (!translatedError.isServer) {
         return h.continue;
       }
+
+      console.log('err', response);
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({

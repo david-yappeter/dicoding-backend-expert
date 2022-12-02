@@ -1,3 +1,5 @@
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const RegisteredThreadComment = require('../../Domains/thread-comments/entities/RegisteredThreadComment');
 const ThreadCommentRepository = require('../../Domains/thread-comments/ThreadCommentRepository');
 
 class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
@@ -7,18 +9,33 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     this._idGenerator = idGenerator;
   }
 
-  async addThread(registerThread) {
-    const { title, body, owner } = registerThread;
-    const id = `thread-${this._idGenerator()}`;
-
+  async _verifyThreadExists(threadId) {
     const query = {
-      text: 'INSERT INTO threads VALUES($1, $2, $3, $4) RETURNING id, title, body, owner',
-      values: [id, title, body, owner],
+      text: 'SELECT EXISTS(SELECT * FROM threads WHERE id = $1)',
+      values: [threadId],
     };
 
     const result = await this._pool.query(query);
 
-    return new RegisteredThread({ ...result.rows[0] });
+    if (!result?.rows[0]?.exists) {
+      throw new NotFoundError('Thread tidak ada');
+    }
+  }
+
+  async addThreadComment(registerThread) {
+    await this._verifyThreadExists();
+
+    const { content, owner } = registerThread;
+    const id = `thread-comments-${this._idGenerator()}`;
+
+    const query = {
+      text: 'INSERT INTO thread_comments VALUES($1, $2, $3) RETURNING id, content, owner',
+      values: [id, content, owner],
+    };
+
+    const result = await this._pool.query(query);
+
+    return new RegisteredThreadComment({ ...result.rows[0] });
   }
 }
 
