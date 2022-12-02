@@ -17,6 +17,12 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
+    created_at: {
+      type: 'TEXT',
+    },
+    updated_at: {
+      type: 'TEXT',
+    },
   });
 
   pgm.addConstraint(
@@ -27,6 +33,6 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-  pgm.dropConstraint('users', 'threads_users_fk');
+  pgm.dropConstraint('threads', 'threads_users_fk');
   pgm.dropTable('threads');
 };

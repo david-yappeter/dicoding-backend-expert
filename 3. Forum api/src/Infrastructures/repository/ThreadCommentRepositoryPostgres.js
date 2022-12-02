@@ -1,3 +1,4 @@
+const { currentDateIso } = require('../../utils/time');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const RegisteredThreadComment = require('../../Domains/thread-comments/entities/RegisteredThreadComment');
 const ThreadCommentRepository = require('../../Domains/thread-comments/ThreadCommentRepository');
@@ -22,20 +23,57 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     }
   }
 
-  async addThreadComment(registerThread) {
-    await this._verifyThreadExists();
+  async addThreadComment(registerThreadComment) {
+    const { content, threadId, owner } = registerThreadComment;
+    await this._verifyThreadExists(threadId);
 
-    const { content, owner } = registerThread;
     const id = `thread-comments-${this._idGenerator()}`;
 
     const query = {
-      text: 'INSERT INTO thread_comments VALUES($1, $2, $3) RETURNING id, content, owner',
-      values: [id, content, owner],
+      text: 'INSERT INTO thread_comments VALUES($1, $2, $3, $4, $5) RETURNING id, content, thread_id, owner',
+      values: [id, content, threadId, owner, currentDateIso()],
     };
 
     const result = await this._pool.query(query);
 
-    return new RegisteredThreadComment({ ...result.rows[0] });
+    return RegisteredThreadComment.DbConstructor({ ...result.rows[0] });
+  }
+
+  async getById(id) {
+    const query = {
+      text: 'SELECT * FROM thread_comments WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rowCount === 0) {
+      throw new NotFoundError('Comment tidak ditemukan');
+    }
+
+    return RegisteredThreadComment.DbConstructor({ ...result.rows[0] });
+  }
+
+  async fetchThreadCommentsByThreadId(threadId) {
+    const query = {
+      text: 'SELECT tc.*, u.username FROM thread_comments tc INNER JOIN users u ON u.id = tc.owner WHERE tc.thread_id = $1',
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rows.map((row) =>
+      RegisteredThreadComment.DbConstructor({ ...row })
+    );
+  }
+
+  async softDeleteThreadCommentById(threadCommentId) {
+    const query = {
+      text: 'UPDATE thread_comments SET deleted_at = $1 WHERE id = $1',
+      values: [threadCommentId],
+    };
+
+    await this._pool.query(query);
   }
 }
 

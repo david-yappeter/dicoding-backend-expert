@@ -4,11 +4,15 @@ class RegisteredThread {
   constructor(payload) {
     this._verifyPayload(payload);
 
-    const { id, title, body, owner } = payload;
+    const { id, title, body, owner, created_at, updated_at, username } =
+      payload;
     this.id = id;
     this.title = title;
     this.body = body;
     this.owner = owner;
+    this.created_at = created_at;
+    this.updated_at = updated_at;
+    this.username = username;
   }
 
   _verifyPayload({ id, title, body, owner }) {

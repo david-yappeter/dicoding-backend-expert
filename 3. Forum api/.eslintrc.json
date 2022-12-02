@@ -18,6 +18,9 @@
     "ecmaVersion": "latest"
   },
   "rules": {
+    "camelcase": "off",
+    "function-paren-newline": "off",
+    "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
     "import/order": "off",
     "import/no-dynamic-require": "off",
