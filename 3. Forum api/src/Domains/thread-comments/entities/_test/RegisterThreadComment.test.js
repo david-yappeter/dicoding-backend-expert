@@ -18,6 +18,7 @@ describe('a RegisterThreadComment entities', () => {
     const payload = {
       content: 'this is content',
       owner: 123,
+      threadId: 'thread-123',
     };
 
     // Action and Assert
@@ -31,6 +32,7 @@ describe('a RegisterThreadComment entities', () => {
     const payload = {
       content: 'this is content',
       owner: 'user-12123',
+      threadId: 'thread-123',
     };
 
     // Action

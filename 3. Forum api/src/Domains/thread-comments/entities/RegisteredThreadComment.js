@@ -5,9 +5,6 @@ class RegisteredThreadComment {
     return new RegisteredThreadComment({
       ...payload,
       threadId: payload.thread_id,
-      content: payload.deleted_at
-        ? '**komentar telah dihapus**'
-        : payload.content,
     });
   }
 
@@ -17,7 +14,7 @@ class RegisteredThreadComment {
     const { id, content, owner, threadId, created_at, updated_at, username } =
       payload;
     this.id = id;
-    this.content = content;
+    this.content = payload.deleted_at ? '**komentar telah dihapus**' : content;
     this.owner = owner;
     this.created_at = created_at;
     this.updated_at = updated_at;

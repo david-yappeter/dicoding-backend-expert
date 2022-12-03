@@ -12,15 +12,10 @@ class GetThreadDetailUseCase {
         thread.id
       );
 
-    return {
+    return new RegisteredThread({
       ...thread,
-      comments: threadComments.map((threadComment) => ({
-        id: threadComment.id,
-        username: threadComment.username,
-        date: threadComment.created_at,
-        content: threadComment.content,
-      })),
-    };
+      comments: threadComments,
+    });
   }
 
   async execute(threadId) {

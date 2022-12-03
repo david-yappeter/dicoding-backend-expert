@@ -10,7 +10,7 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     this._idGenerator = idGenerator;
   }
 
-  async _verifyThreadExists(threadId) {
+  async verifyThreadExists(threadId) {
     const query = {
       text: 'SELECT EXISTS(SELECT * FROM threads WHERE id = $1)',
       values: [threadId],
@@ -25,7 +25,7 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
 
   async addThreadComment(registerThreadComment) {
     const { content, threadId, owner } = registerThreadComment;
-    await this._verifyThreadExists(threadId);
+    await this.verifyThreadExists(threadId);
 
     const id = `thread-comments-${this._idGenerator()}`;
 
@@ -69,11 +69,13 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
 
   async softDeleteThreadCommentById(threadCommentId) {
     const query = {
-      text: 'UPDATE thread_comments SET deleted_at = $1 WHERE id = $1',
-      values: [threadCommentId],
+      text: 'UPDATE thread_comments SET deleted_at = $1 WHERE id = $2',
+      values: [currentDateIso(), threadCommentId],
     };
 
     await this._pool.query(query);
+
+    return null;
   }
 }
 

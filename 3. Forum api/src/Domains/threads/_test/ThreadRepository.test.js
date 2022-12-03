@@ -5,6 +5,8 @@ describe('ThreadRepository interface', () => {
     const threadRepository = new ThreadRepository();
     expect(threadRepository).toHaveProperty('addThread');
     expect(threadRepository.addThread).toBeInstanceOf(Function);
+    expect(threadRepository).toHaveProperty('getThreadDetailById');
+    expect(threadRepository.getThreadDetailById).toBeInstanceOf(Function);
   });
 
   it('should throw new error when invoke abstract behavior', async () => {
@@ -13,6 +15,9 @@ describe('ThreadRepository interface', () => {
 
     // Action and Assert
     await expect(threadRepository.addThread({})).rejects.toThrowError(
+      'THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
+    await expect(threadRepository.getThreadDetailById({})).rejects.toThrowError(
       'THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
   });

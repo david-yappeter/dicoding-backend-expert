@@ -3,7 +3,6 @@
         "module": "CommonJS",
         "moduleResolution": "Node",
         "target": "ES6",
-        "baseUrl": "./src"
     },
     "exclude": [
         "node_modules",

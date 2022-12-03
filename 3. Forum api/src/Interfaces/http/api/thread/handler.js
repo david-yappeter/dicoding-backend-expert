@@ -26,7 +26,12 @@ class ThreadHandler {
           body: thread.body,
           date: thread.created_at,
           username: thread.username,
-          comments: thread.comments,
+          comments: thread.comments.map((comment) => ({
+            id: comment.id,
+            username: comment.username,
+            date: comment.created_at,
+            content: comment.content,
+          })),
         },
       },
     });

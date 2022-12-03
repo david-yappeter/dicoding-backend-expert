@@ -3,7 +3,7 @@ const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const RegisterThread = require('@../../../Domains/threads/entities/RegisterThread');
 const AddThreadUseCase = require('../AddThreadUseCase');
 
-describe('AddUserUseCase', () => {
+describe('AddThreadUseCase', () => {
   /**
    * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
    */
@@ -13,12 +13,14 @@ describe('AddUserUseCase', () => {
       title: 'dicoding title',
       body: 'dicoding body',
       owner: 'user-123',
+      threadId: 'thread-123',
     };
     const expectedRegisteredThread = new RegisteredThread({
       id: 'thread-123',
       title: useCasePayload.title,
       body: useCasePayload.body,
       owner: 'user-123',
+      threadId: 'thread-123',
     });
 
     /** creating dependency of use case */
@@ -30,12 +32,12 @@ describe('AddUserUseCase', () => {
       .mockImplementation(() => Promise.resolve(expectedRegisteredThread));
 
     /** creating use case instance */
-    const getThreadUseCase = new AddThreadUseCase({
+    const addThreadUseCase = new AddThreadUseCase({
       threadRepository: mockThreadRepository,
     });
 
     // Action
-    const registeredThread = await getThreadUseCase.execute(useCasePayload);
+    const registeredThread = await addThreadUseCase.execute(useCasePayload);
 
     // Assert
     expect(registeredThread).toStrictEqual(expectedRegisteredThread);
@@ -44,6 +46,7 @@ describe('AddUserUseCase', () => {
         title: useCasePayload.title,
         body: useCasePayload.body,
         owner: useCasePayload.owner,
+        threadId: useCasePayload.threadId,
       })
     );
   });
