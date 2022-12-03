@@ -19,8 +19,6 @@ class GetThreadDetailUseCase {
       threadCommentIds
     );
 
-    console.log(replies);
-
     const returnedThreadComments = threadComments.map((comment) => ({
       ...comment,
       replies:
