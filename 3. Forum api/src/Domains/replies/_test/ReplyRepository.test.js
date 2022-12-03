@@ -1,6 +1,6 @@
 const ThreadCommentRepository = require('../ReplyRepository');
 
-describe('ThreadCommentRepository interface', () => {
+describe('ReplyRepository interface', () => {
   it('should have function', () => {
     const threadCommentRepository = new ThreadCommentRepository();
     expect(threadCommentRepository).toHaveProperty('addReply');
@@ -11,6 +11,8 @@ describe('ThreadCommentRepository interface', () => {
     );
     expect(threadCommentRepository).toHaveProperty('softDeleteById');
     expect(threadCommentRepository.softDeleteById).toBeInstanceOf(Function);
+    expect(threadCommentRepository).toHaveProperty('getById');
+    expect(threadCommentRepository.getById).toBeInstanceOf(Function);
   });
 
   it('should throw new error when invoke abstract behavior', async () => {
@@ -19,13 +21,15 @@ describe('ThreadCommentRepository interface', () => {
 
     // Action and Assert
     await expect(threadCommentRepository.addReply({})).rejects.toThrowError(
-      'THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+      'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
     await expect(
       threadCommentRepository.fetchByThreadCommentIds({})
-    ).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    ).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(
       threadCommentRepository.softDeleteById({})
-    ).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    ).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+      threadCommentRepository.getById({})
+    ).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

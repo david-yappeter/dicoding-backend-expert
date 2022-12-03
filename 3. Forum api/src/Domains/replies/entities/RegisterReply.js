@@ -4,10 +4,20 @@ class RegisterReply {
   constructor(payload) {
     this._verifyPayload(payload);
 
-    const { content, thread_comment_id, owner } = payload;
+    const {
+      content,
+      thread_comment_id,
+      owner,
+      created_at,
+      updated_at,
+      deleted_at,
+    } = payload;
     this.content = content;
     this.thread_comment_id = thread_comment_id;
     this.owner = owner;
+    this.created_at = created_at;
+    this.updated_at = updated_at;
+    this.deleted_at = deleted_at;
   }
 
   _verifyPayload({ content, thread_comment_id, owner }) {

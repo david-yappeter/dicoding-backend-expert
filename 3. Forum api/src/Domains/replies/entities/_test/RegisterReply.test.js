@@ -18,7 +18,7 @@ describe('a RegisterReply entities', () => {
     const payload = {
       content: 'this is content',
       owner: 123,
-      thread_comment_id: 'thread-123',
+      thread_comment_id: 'thread-comments-123',
     };
 
     // Action and Assert
@@ -32,7 +32,7 @@ describe('a RegisterReply entities', () => {
     const payload = {
       content: 'this is content',
       owner: 'user-12123',
-      thread_comment_id: 'thread-123',
+      thread_comment_id: 'thread-comments-123',
     };
 
     // Action

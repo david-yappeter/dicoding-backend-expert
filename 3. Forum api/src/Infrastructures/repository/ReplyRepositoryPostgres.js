@@ -1,4 +1,5 @@
 const InvariantError = require('../../Commons/exceptions/InvariantError');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const RegisteredReply = require('../../Domains/replies/entities/RegisteredReply');
 const ReplyRepository = require('../../Domains/replies/ReplyRepository');
 const thread = require('../../Interfaces/http/api/thread');
@@ -30,8 +31,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     const currentTime = currentDateIso();
 
     const query = {
-      text: 'INSERT INTO replies (id, content, thread_comment_id, owner, created_at, updated_at) VALUES($1, $2, $3, $4, $5) RETURNING id, content, thread_comment_id, owner, created_at, updated_at,  deleted_at',
-      values: [id, content, thread_comment_id, owner, currentTime],
+      text: 'INSERT INTO replies (id, content, thread_comment_id, owner, created_at, updated_at, deleted_at) VALUES($1, $2, $3, $4, $5, $5, $6) RETURNING id, content, thread_comment_id, owner, created_at, updated_at, deleted_at',
+      values: [id, content, thread_comment_id, owner, currentTime, null],
     };
 
     const result = await this._pool.query(query);
@@ -39,11 +40,28 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     return new RegisteredReply({ ...result.rows[0] });
   }
 
+  async getById(replyId) {
+    const query = {
+      text: 'SELECT r.*, u.username FROM replies r INNER JOIN users u ON u.id = r.owner WHERE r.id = $1',
+      values: [replyId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rowCount === 0) {
+      throw new NotFoundError('reply tidak ditemukan');
+    }
+
+    return new RegisteredReply({ ...result.rows[0] });
+  }
+
   async fetchByThreadCommentIds(threadCommentIds) {
     const query = {
-      text: `SELECT * FROM replies WHERE thread_comment_id IN (${threadCommentIds
-        .map((_, idx) => `$${idx}`)
-        .join(',')})`,
+      text: `SELECT r.*, u.username FROM replies r INNER JOIN users u ON u.id = r.owner WHERE r.thread_comment_id IN (${threadCommentIds
+        .map((_, idx) => `$${idx + 1}`)
+        .join(',')})
+        ORDER BY created_at ASC
+        `,
       values: [...threadCommentIds],
     };
 

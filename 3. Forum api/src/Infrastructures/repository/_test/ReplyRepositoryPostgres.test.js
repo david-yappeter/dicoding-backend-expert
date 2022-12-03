@@ -4,6 +4,8 @@ const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper')
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const RegisteredReply = require('../../../Domains/replies/entities/RegisteredReply');
 const RegisterReply = require('../../../Domains/replies/entities/RegisterReply');
+const { currentDateIso } = require('../../../utils/time');
+const pool = require('../../database/postgres/pool');
 const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 
 describe('ReplyRepositoryPostgres', () => {
@@ -86,10 +88,14 @@ describe('ReplyRepositoryPostgres', () => {
 
     it('should return registered reply', async () => {
       // Arrange
+      const currentTime = currentDateIso();
       const registerReply = new RegisterReply({
         content: 'Reply Content A',
         thread_comment_id: commentA.id,
         owner: userA.id,
+        created_at: currentTime,
+        updated_at: currentTime,
+        deleted_at: null,
       });
       const fakeIdGenerator = () => '123'; // stub!
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(
@@ -113,53 +119,45 @@ describe('ReplyRepositoryPostgres', () => {
   });
 
   describe('fetchByThreadCommentIds function', () => {
-    it('should persist register reply and return registered reply', async () => {
+    it('should return array length 0', async () => {
       // Arrange
-      const registerReply = new RegisterReply({
-        content: 'Reply Content A',
-        thread_comment_id: commentA.id,
-        owner: userA.id,
-      });
-      const fakeIdGenerator = () => '123'; // stub!
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(
-        pool,
-        fakeIdGenerator
-      );
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action
-      await replyRepositoryPostgres.addReply(registerReply);
+      const response = await replyRepositoryPostgres.fetchByThreadCommentIds([
+        commentA,
+      ]);
 
       // Assert
-      const replies = await ReplyTableTestHelper.findByThreadCommentId(
-        registerReply.thread_comment_id
-      );
-
-      expect(replies).toHaveLength(1);
+      expect(response).toHaveLength(0);
     });
 
-    it('should return registered reply', async () => {
+    it('should return array length 1', async () => {
       // Arrange
-      const registerReply = new RegisterReply({
+      const currentTime = currentDateIso();
+      const registerReply = {
+        id: 'reply-123',
         content: 'Reply Content A',
         thread_comment_id: commentA.id,
         owner: userA.id,
-      });
-      const fakeIdGenerator = () => '123'; // stub!
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(
-        pool,
-        fakeIdGenerator
-      );
+        created_at: currentTime,
+        updated_at: currentTime,
+        deleted_at: null,
+      };
+
+      await ReplyTableTestHelper.addReply(registerReply);
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action
-      const registeredReply = await replyRepositoryPostgres.addReply(
-        registerReply
-      );
+      const response = await replyRepositoryPostgres.fetchByThreadCommentIds([
+        commentA.id,
+      ]);
 
       // Assert
-      expect(registeredReply).toStrictEqual(
+      expect(response).toHaveLength(1);
+      expect(response[0]).toStrictEqual(
         new RegisteredReply({
           ...registerReply,
-          id: 'reply-123',
         })
       );
     });

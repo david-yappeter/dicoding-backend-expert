@@ -1,4 +1,6 @@
+const AddReplyUseCase = require('../../../../Applications/use_case/AddReplyUseCase');
 const AddThreadUseCase = require('../../../../Applications/use_case/AddThreadUseCase');
+const DeleteReplyUseCase = require('../../../../Applications/use_case/DeleteReplyUseCase');
 const GetThreadDetailUseCase = require('../../../../Applications/use_case/GetThreadDetailUseCase');
 
 class ReplyHandler {
@@ -10,57 +12,45 @@ class ReplyHandler {
   }
 
   async postReplyHandler(request, h) {
-    const { id: credentialId } = request.auth.credentials;
-    const { thread_id, thread_comment_id } = request.params;
+    const { id: credential_id } = request.auth.credentials;
 
-    // const getThreadDetailUseCase = this._container.getInstance(
-    //   GetThreadDetailUseCase.name
-    // );
-    // const thread = await getThreadDetailUseCase.execute(threadId);
+    const addReplyUseCase = this._container.getInstance(AddReplyUseCase.name);
+    const registeredReply = await addReplyUseCase.execute({
+      ...request.params,
+      ...request.payload,
+      owner: credential_id,
+    });
 
     const response = h.response({
       status: 'success',
       data: {
-        thread: {
-          id: thread.id,
-          title: thread.title,
-          body: thread.body,
-          date: thread.created_at,
-          username: thread.username,
-          comments: thread.comments.map((comment) => ({
-            id: comment.id,
-            username: comment.username,
-            date: comment.created_at,
-            content: comment.content,
-          })),
+        addedReply: {
+          id: registeredReply.id,
+          content: registeredReply.content,
+          owner: registeredReply.owner,
         },
       },
     });
-    response.code(200);
+    response.code(201);
     return response;
   }
 
   async deleteReplyHandler(request, h) {
     const { id: credentialId } = request.auth.credentials;
-    const { thread_id, thread_comment_id, reply_id } = request.params;
 
-    // const addThreadUseCase = this._container.getInstance(AddThreadUseCase.name);
-    // const addedThread = await addThreadUseCase.execute({
-    //   ...request.payload,
-    //   owner: credentialId,
-    // });
+    const deleteReplyUseCase = this._container.getInstance(
+      DeleteReplyUseCase.name
+    );
+    await deleteReplyUseCase.execute({
+      ...request.params,
+      ...request.payload,
+      owner: credentialId,
+    });
 
     const response = h.response({
       status: 'success',
-      data: {
-        addedThread: {
-          id: addedThread.id,
-          title: addedThread.title,
-          owner: addedThread.owner,
-        },
-      },
     });
-    response.code(201);
+    response.code(200);
     return response;
   }
 }

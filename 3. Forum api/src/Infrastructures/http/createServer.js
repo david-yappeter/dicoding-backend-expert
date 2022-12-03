@@ -7,6 +7,7 @@ const users = require('../../Interfaces/http/api/users');
 const thread = require('../../Interfaces/http/api/thread');
 const threadComment = require('../../Interfaces/http/api/thread-comments');
 const authentications = require('../../Interfaces/http/api/authentications');
+const reply = require('../../Interfaces/http/api/reply');
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -50,6 +51,10 @@ const createServer = async (container) => {
       plugin: threadComment,
       options: { container },
     },
+    {
+      plugin: reply,
+      options: { container },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -74,6 +79,8 @@ const createServer = async (container) => {
       if (!translatedError.isServer) {
         return h.continue;
       }
+
+      console.log('R', response);
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({

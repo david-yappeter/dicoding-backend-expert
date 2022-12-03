@@ -31,6 +31,7 @@ class ThreadHandler {
             username: comment.username,
             date: comment.created_at,
             content: comment.content,
+            replies: comment.replies,
           })),
         },
       },
