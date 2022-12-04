@@ -12,13 +12,13 @@ class ReplyHandler {
   }
 
   async postReplyHandler(request, h) {
-    const { id: credential_id } = request.auth.credentials;
+    const { id } = request.auth.credentials;
 
     const addReplyUseCase = this._container.getInstance(AddReplyUseCase.name);
     const registeredReply = await addReplyUseCase.execute({
       ...request.params,
       ...request.payload,
-      owner: credential_id,
+      owner: id,
     });
 
     const response = h.response({
@@ -36,7 +36,7 @@ class ReplyHandler {
   }
 
   async deleteReplyHandler(request, h) {
-    const { id: credentialId } = request.auth.credentials;
+    const { id } = request.auth.credentials;
 
     const deleteReplyUseCase = this._container.getInstance(
       DeleteReplyUseCase.name
@@ -44,7 +44,7 @@ class ReplyHandler {
     await deleteReplyUseCase.execute({
       ...request.params,
       ...request.payload,
-      owner: credentialId,
+      owner: id,
     });
 
     const response = h.response({

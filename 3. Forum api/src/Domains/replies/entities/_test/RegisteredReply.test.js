@@ -29,6 +29,28 @@ describe('a RegisteredReply entities', () => {
     );
   });
 
+  it('should hide content when deleted', () => {
+    // Arrange
+    const payload = {
+      id: 'reply-99sdb9hg09ersgh90ers',
+      content: 'content',
+      owner: 'user-ejiwag12',
+      thread_comment_id: 'thread-comments-123',
+      deleted_at: currentDateIso(),
+    };
+
+    // Action
+    const { id, content, owner, thread_comment_id } = new RegisteredReply(
+      payload
+    );
+
+    // Assert
+    expect(id).toEqual(payload.id);
+    expect(content).toEqual('**balasan telah dihapus**');
+    expect(owner).toEqual(payload.owner);
+    expect(thread_comment_id).toEqual(payload.thread_comment_id);
+  });
+
   it('should create RegisteredReply object correctly', () => {
     // Arrange
     const payload = {

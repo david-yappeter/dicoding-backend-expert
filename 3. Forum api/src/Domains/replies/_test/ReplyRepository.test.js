@@ -29,7 +29,8 @@ describe('ReplyRepository interface', () => {
     await expect(
       threadCommentRepository.softDeleteById({})
     ).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-      threadCommentRepository.getById({})
-    ).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentRepository.getById({})).rejects.toThrowError(
+      'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
   });
 });

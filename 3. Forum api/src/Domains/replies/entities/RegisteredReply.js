@@ -17,6 +17,7 @@ class RegisteredReply {
     this.id = id;
     this.content = payload.deleted_at ? '**balasan telah dihapus**' : content;
     this.owner = owner;
+    this.date = created_at;
     this.created_at = created_at;
     this.updated_at = updated_at;
     this.deleted_at = deleted_at;

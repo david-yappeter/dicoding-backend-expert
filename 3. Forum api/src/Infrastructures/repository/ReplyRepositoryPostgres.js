@@ -12,19 +12,6 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     this._idGenerator = idGenerator;
   }
 
-  async verifyAvailableUsername(username) {
-    const query = {
-      text: 'SELECT username FROM users WHERE username = $1',
-      values: [username],
-    };
-
-    const result = await this._pool.query(query);
-
-    if (result.rowCount) {
-      throw new InvariantError('username tidak tersedia');
-    }
-  }
-
   async addReply(registerReply) {
     const { content, thread_comment_id, owner } = registerReply;
     const id = `reply-${this._idGenerator()}`;
@@ -56,8 +43,12 @@ class ReplyRepositoryPostgres extends ReplyRepository {
   }
 
   async fetchByThreadCommentIds(threadCommentIds) {
+    if (Array.isArray(threadCommentIds) && threadCommentIds.length === 0) {
+      return [];
+    }
+
     const query = {
-      text: `SELECT r.*, u.username FROM replies r INNER JOIN users u ON u.id = r.owner WHERE r.thread_comment_id IN (${threadCommentIds
+      text: `SELECT r.*, r.created_at as date, u.username FROM replies r INNER JOIN users u ON u.id = r.owner WHERE r.thread_comment_id IN (${threadCommentIds
         .map((_, idx) => `$${idx + 1}`)
         .join(',')})
         ORDER BY created_at ASC

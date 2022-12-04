@@ -16,7 +16,7 @@ describe('DeleteThreadCommentUseCase', () => {
       thread_id: 'thread-123',
       thread_comment_id: 'thread-comments-123',
       reply_id: 'reply-123',
-      credential_id: 'user-1234',
+      owner: 'user-1234',
     };
 
     const expectedReplies = [
@@ -100,7 +100,7 @@ describe('DeleteThreadCommentUseCase', () => {
       thread_id: 'thread-123',
       thread_comment_id: 'thread-comments-123',
       reply_id: 'reply-123',
-      credential_id: 'user-123',
+      owner: 'user-123',
     };
 
     const expectedReplies = [

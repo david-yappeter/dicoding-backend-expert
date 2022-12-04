@@ -11,8 +11,16 @@ class RegisteredThreadComment {
   constructor(payload) {
     this._verifyPayload(payload);
 
-    const { id, content, owner, threadId, created_at, updated_at, username } =
-      payload;
+    const {
+      id,
+      content,
+      owner,
+      threadId,
+      created_at,
+      updated_at,
+      username,
+      replies,
+    } = payload;
     this.id = id;
     this.content = payload.deleted_at ? '**komentar telah dihapus**' : content;
     this.owner = owner;
@@ -20,6 +28,7 @@ class RegisteredThreadComment {
     this.updated_at = updated_at;
     this.username = username;
     this.threadId = threadId;
+    this.replies = replies;
   }
 
   _verifyPayload({ id, content, owner, threadId }) {

@@ -1,3 +1,5 @@
+const RegisteredReply = require('../../Domains/replies/entities/RegisteredReply');
+const RegisteredThreadComment = require('../../Domains/thread-comments/entities/RegisteredThreadComment');
 const RegisteredThread = require('../../Domains/threads/entities/RegisteredThread');
 
 class GetThreadDetailUseCase {
@@ -19,18 +21,22 @@ class GetThreadDetailUseCase {
       threadCommentIds
     );
 
-    const returnedThreadComments = threadComments.map((comment) => ({
-      ...comment,
-      replies:
-        replies
-          .filter((reply) => reply.thread_comment_id === comment.id)
-          .map((reply) => ({
-            id: reply.id,
-            content: reply.content,
-            date: reply.created_at,
-            username: reply.username,
-          })) || [],
-    }));
+    const returnedThreadComments = threadComments.map(
+      (comment) =>
+        new RegisteredThreadComment({
+          ...comment,
+          replies: Array.isArray(replies)
+            ? replies
+                .filter((reply) => reply.thread_comment_id === comment.id)
+                .map(
+                  (reply) =>
+                    new RegisteredReply({
+                      ...reply,
+                    })
+                )
+            : [],
+        })
+    );
 
     return new RegisteredThread({
       ...thread,

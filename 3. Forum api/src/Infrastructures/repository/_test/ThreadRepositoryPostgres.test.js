@@ -53,10 +53,12 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should return registered thread correctly', async () => {
       // Arrange
+      const currentTime = currentDateIso();
       const registerThread = new RegisterThread({
         title: 'First Thread',
         body: 'body of first thread',
         owner: userA.id,
+        created_at: currentTime,
       });
       const fakeIdGenerator = () => '123'; // stub!
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
@@ -73,9 +75,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(registeredThread).toStrictEqual(
         new RegisteredThread({
           id: 'thread-123',
-          title: registerThread.title,
-          body: registerThread.body,
-          owner: registerThread.owner,
+          ...registerThread,
         })
       ); // Arrange
     });
@@ -115,7 +115,7 @@ describe('ThreadRepositoryPostgres', () => {
       );
 
       // Assert
-      expect(response).toStrictEqual(new RegisteredThread(thread));
+      expect(response).toStrictEqual(new RegisteredThread({ ...thread }));
     });
 
     it('should return registered thread correctly', async () => {

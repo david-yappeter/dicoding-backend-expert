@@ -2,6 +2,7 @@ const ReplyTableTestHelper = require('../../../../tests/ReplyTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
 const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const RegisteredReply = require('../../../Domains/replies/entities/RegisteredReply');
 const RegisterReply = require('../../../Domains/replies/entities/RegisterReply');
 const { currentDateIso } = require('../../../utils/time');
@@ -118,6 +119,45 @@ describe('ReplyRepositoryPostgres', () => {
     });
   });
 
+  describe('getById function', () => {
+    it('should return Not Found Error', async () => {
+      // Arrange
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      expect(replyRepositoryPostgres.getById('xxx')).rejects.toThrow(
+        NotFoundError
+      );
+    });
+
+    it('should success', async () => {
+      // Arrange
+      const currentTime = currentDateIso();
+      const registerReply = {
+        id: 'reply-123',
+        content: 'Reply Content A',
+        thread_comment_id: commentA.id,
+        owner: userA.id,
+        created_at: currentTime,
+        updated_at: currentTime,
+        deleted_at: null,
+        username: userA.username,
+      };
+
+      await ReplyTableTestHelper.addReply(registerReply);
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      expect(
+        replyRepositoryPostgres.getById(registerReply.id)
+      ).resolves.toStrictEqual(
+        new RegisteredReply({
+          ...registerReply,
+        })
+      );
+    });
+  });
+
   describe('fetchByThreadCommentIds function', () => {
     it('should return array length 0', async () => {
       // Arrange
@@ -143,6 +183,7 @@ describe('ReplyRepositoryPostgres', () => {
         created_at: currentTime,
         updated_at: currentTime,
         deleted_at: null,
+        username: userA.username,
       };
 
       await ReplyTableTestHelper.addReply(registerReply);
@@ -160,6 +201,31 @@ describe('ReplyRepositoryPostgres', () => {
           ...registerReply,
         })
       );
+    });
+  });
+
+  describe('softDeleteById function', () => {
+    it('should success', async () => {
+      // Arrange
+      const currentTime = currentDateIso();
+      const registerReply = {
+        id: 'reply-123',
+        content: 'Reply Content A',
+        thread_comment_id: commentA.id,
+        owner: userA.id,
+        created_at: currentTime,
+        updated_at: currentTime,
+        deleted_at: null,
+        username: userA.username,
+      };
+
+      await ReplyTableTestHelper.addReply(registerReply);
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      expect(
+        replyRepositoryPostgres.softDeleteById(registerReply.id)
+      ).resolves.not.toThrowError();
     });
   });
 });

@@ -19,6 +19,7 @@
   },
   "rules": {
     "camelcase": "off",
+    "no-confusing-arrow": "off",
     "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
@@ -27,7 +28,7 @@
     "import/no-unresolved": "off",
     "global-require": "off",
     "no-unused-vars": "off",
-    "no-console": "off",
+    "indent": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
     "no-undef": "off",
