@@ -21,7 +21,7 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
   });
 
   describe('when POST /threads/{threadId}/comments/{commentId}/replies', () => {
-    it('should response 201 and new comment', async () => {
+    it('should response 201 and new replies', async () => {
       // Arrange
       const requestPayload = {
         content: 'My random comment of reply is real/',

@@ -230,7 +230,7 @@ describe('ReplyRepositoryPostgres', () => {
       // Action & Assert
       await expect(
         replyRepositoryPostgres.softDeleteById(registerReply.id)
-      ).resolves.not.toThrowError();
+      ).resolves.not.toThrow(Error);
     });
   });
 });

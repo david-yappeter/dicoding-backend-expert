@@ -12,7 +12,7 @@ describe('AddReplyUseCase', () => {
   /**
    * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
    */
-  it('should orchestrating the add user action correctly', async () => {
+  it('should orchestrating the add reply action correctly', async () => {
     // Arrange
     const currentTime = currentDateIso();
     const useCasePayload = {
@@ -47,7 +47,9 @@ describe('AddReplyUseCase', () => {
       .mockImplementation(() => Promise.resolve());
     mockReplyRepository.addReply = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(expectedRegisteredReply));
+      .mockImplementation(() =>
+        Promise.resolve(new RegisteredReply({ ...expectedRegisteredReply }))
+      );
 
     /** creating use case instance */
     const addThreadUseCase = new AddReplyUseCase({

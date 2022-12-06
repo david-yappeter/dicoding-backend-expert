@@ -175,7 +175,7 @@ describe('DeleteThreadCommentUseCase', () => {
     // Action & Assert
     await expect(
       deleteReplyUseCase.execute(useCasePayload)
-    ).resolves.not.toThrowError();
+    ).resolves.not.toThrow(Error);
     expect(mockThreadRepository.getThreadDetailById).toBeCalledWith(
       useCasePayload.thread_id
     );

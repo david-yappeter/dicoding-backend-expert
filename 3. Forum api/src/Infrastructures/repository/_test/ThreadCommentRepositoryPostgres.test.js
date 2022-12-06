@@ -52,28 +52,28 @@ describe('ThreadCommentRepositoryPostgres', () => {
     await ThreadCommentsTableTestHelper.cleanTable();
   });
 
-  describe('verifyThreadExists function', () => {
-    it('should return thread not exist', async () => {
-      const threadCommentRepositoryPostgres =
-        new ThreadCommentRepositoryPostgres(pool, {});
+  // describe('verifyThreadExists function', () => {
+  //   it('should return thread not exist', async () => {
+  //     const threadCommentRepositoryPostgres =
+  //       new ThreadCommentRepositoryPostgres(pool, {});
 
-      // Action & assert
-      await expect(
-        threadCommentRepositoryPostgres.verifyThreadExists('xxx')
-      ).rejects.toThrow(NotFoundError);
-    });
+  //     // Action & assert
+  //     await expect(
+  //       threadCommentRepositoryPostgres.verifyThreadExists('xxx')
+  //     ).rejects.toThrow(NotFoundError);
+  //   });
 
-    it('should return thread exist', async () => {
-      // Arrange
-      const threadCommentRepositoryPostgres =
-        new ThreadCommentRepositoryPostgres(pool, {});
+  //   it('should return thread exist', async () => {
+  //     // Arrange
+  //     const threadCommentRepositoryPostgres =
+  //       new ThreadCommentRepositoryPostgres(pool, {});
 
-      // Action & assert
-      await expect(
-        threadCommentRepositoryPostgres.verifyThreadExists(threadA.id)
-      ).resolves.not.toThrowError();
-    });
-  });
+  //     // Action & assert
+  //     await expect(
+  //       threadCommentRepositoryPostgres.verifyThreadExists(threadA.id)
+  //     ).resolves.not.toThrow(Error);
+  //   });
+  // });
 
   describe('addThreadComment function', () => {
     it('should persist register thread comment and return registered thread correctly', async () => {
@@ -134,7 +134,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Action & Assert
       await expect(
         threadCommentRepositoryPostgres.getById('xxx')
-      ).rejects.toThrow();
+      ).rejects.toThrow(NotFoundError);
     });
 
     it('should get registered thread correctly', async () => {
@@ -236,7 +236,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
         threadCommentRepositoryPostgres.softDeleteThreadCommentById(
           threadComment.threadId
         )
-      ).resolves.not.toThrow();
+      ).resolves.not.toThrow(Error);
     });
   });
 });

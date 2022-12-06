@@ -8,7 +8,7 @@ describe('a RegisterThread entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterThread(payload)).toThrowError(
+    expect(() => new RegisterThread({ ...payload })).toThrowError(
       'REGISTER_THREAD.NOT_CONTAIN_NEEDED_PROPERTY'
     );
   });
@@ -22,7 +22,7 @@ describe('a RegisterThread entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterThread(payload)).toThrowError(
+    expect(() => new RegisterThread({ ...payload })).toThrowError(
       'REGISTER_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
@@ -36,7 +36,7 @@ describe('a RegisterThread entities', () => {
     };
 
     // Action
-    const { title, body } = new RegisterThread(payload);
+    const { title, body } = new RegisterThread({ ...payload });
 
     // Assert
     expect(title).toEqual(payload.title);

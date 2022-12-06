@@ -7,15 +7,15 @@ class DeleteReplyUseCase {
     this._replyRepository = replyRepository;
   }
 
-  async _validateThread(threadId) {
+  async _verifyThreadAvailability(threadId) {
     await this._threadRepository.getThreadDetailById(threadId);
   }
 
-  async _validateThreadComment(threadCommentId) {
+  async _verifyThreadCommentAvailability(threadCommentId) {
     await this._threadCommentRepository.getById(threadCommentId);
   }
 
-  async _validateOwner(replyId, credentialId) {
+  async _verifyReplyOwner(replyId, credentialId) {
     const reply = await this._replyRepository.getById(replyId);
 
     if (reply.owner !== credentialId) {
@@ -27,13 +27,13 @@ class DeleteReplyUseCase {
     const { owner, reply_id, thread_comment_id, thread_id } = useCasePayload;
 
     // check thread (404)
-    await this._validateThread(thread_id);
+    await this._verifyThreadAvailability(thread_id);
 
     // check comment (404)
-    await this._validateThreadComment(thread_comment_id);
+    await this._verifyThreadCommentAvailability(thread_comment_id);
 
     // check owner
-    await this._validateOwner(reply_id, owner);
+    await this._verifyReplyOwner(reply_id, owner);
 
     return this._replyRepository.softDeleteById(reply_id);
   }

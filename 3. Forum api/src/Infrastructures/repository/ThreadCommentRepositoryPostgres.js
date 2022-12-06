@@ -10,22 +10,8 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     this._idGenerator = idGenerator;
   }
 
-  async verifyThreadExists(threadId) {
-    const query = {
-      text: 'SELECT EXISTS(SELECT * FROM threads WHERE id = $1)',
-      values: [threadId],
-    };
-
-    const result = await this._pool.query(query);
-
-    if (!result?.rows[0]?.exists) {
-      throw new NotFoundError('thread tidak ditemukan');
-    }
-  }
-
   async addThreadComment(registerThreadComment) {
     const { content, threadId, owner } = registerThreadComment;
-    await this.verifyThreadExists(threadId);
 
     const id = `thread-comments-${this._idGenerator()}`;
 

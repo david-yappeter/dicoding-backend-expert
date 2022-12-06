@@ -9,7 +9,7 @@ describe('a RegisteredThreadComment entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisteredThreadComment(payload)).toThrowError(
+    expect(() => new RegisteredThreadComment({ ...payload })).toThrowError(
       'REGISTERED_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY'
     );
   });
@@ -24,7 +24,7 @@ describe('a RegisteredThreadComment entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisteredThreadComment(payload)).toThrowError(
+    expect(() => new RegisteredThreadComment({ ...payload })).toThrowError(
       'REGISTERED_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
@@ -40,7 +40,7 @@ describe('a RegisteredThreadComment entities', () => {
     };
 
     // Action
-    const { id, content, owner } = new RegisteredThreadComment(payload);
+    const { id, content, owner } = new RegisteredThreadComment({ ...payload });
 
     // Assert
     expect(id).toEqual(payload.id);
@@ -50,19 +50,37 @@ describe('a RegisteredThreadComment entities', () => {
 
   it('should create RegisteredThreadComment object correctly', () => {
     // Arrange
+    const currentTime = currentDateIso();
     const payload = {
       id: 'thread-99sdb9hg09ersgh90ers',
       content: 'content',
       owner: 'user-ejiwag12',
       threadId: 'thread-123',
+      created_at: currentTime,
+      updated_at: currentTime,
+      replies: [],
     };
 
     // Action
-    const { id, content, owner } = new RegisteredThreadComment(payload);
+    const {
+      id,
+      content,
+      owner,
+      created_at,
+      updated_at,
+      username,
+      threadId,
+      replies,
+    } = new RegisteredThreadComment({ ...payload });
 
     // Assert
     expect(id).toEqual(payload.id);
     expect(content).toEqual(payload.content);
     expect(owner).toEqual(payload.owner);
+    expect(created_at).toEqual(payload.created_at);
+    expect(updated_at).toEqual(payload.updated_at);
+    expect(username).toEqual(payload.username);
+    expect(threadId).toEqual(payload.threadId);
+    expect(replies).toEqual(payload.replies);
   });
 });

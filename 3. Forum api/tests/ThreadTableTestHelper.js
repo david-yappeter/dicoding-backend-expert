@@ -8,10 +8,11 @@ const ThreadTableTestHelper = {
     title = 'dicoding',
     body = 'body',
     owner = 'user-123',
+    created_at = currentDateIso(),
   }) {
     const query = {
       text: 'INSERT INTO threads(id, title, body, owner, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $5)',
-      values: [id, title, body, owner, currentDateIso()],
+      values: [id, title, body, owner, created_at],
     };
 
     await pool.query(query);

@@ -63,9 +63,9 @@ describe('DeleteThreadCommentUseCase', () => {
     });
 
     // Action & Assert
-    expect(async () => {
-      await deleteThreadCommentUseCase.execute(useCasePayload);
-    }).rejects.toThrow();
+    await expect(
+      deleteThreadCommentUseCase.execute(useCasePayload)
+    ).rejects.toThrowError('REQUEST_PAYLOAD.NULL');
   });
 
   it('should return Authorization Error', async () => {
@@ -193,9 +193,9 @@ describe('DeleteThreadCommentUseCase', () => {
     });
 
     // Action & Assert
-    expect(async () => {
-      await deleteThreadCommentUseCase.execute(useCasePayload);
-    }).not.toThrowError();
+    await expect(
+      deleteThreadCommentUseCase.execute(useCasePayload)
+    ).resolves.not.toThrow(Error);
     await deleteThreadCommentUseCase.execute(useCasePayload);
     expect(mockThreadRepository.getThreadDetailById).toBeCalledWith(
       useCasePayload.threadId

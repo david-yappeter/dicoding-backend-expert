@@ -1,4 +1,9 @@
+const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
+const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const ThreadCommentRepository = require('../../../Domains/thread-comments/ThreadCommentRepository');
+const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+const { currentDateIso } = require('../../../utils/time');
 const AddThreadCommentUseCase = require('../AddThreadCommentUseCase');
 
 describe('AddThreadCommentUseCase', () => {
@@ -6,33 +11,34 @@ describe('AddThreadCommentUseCase', () => {
     // Arrange
     const useCasePayload = null;
 
-    const expectedRegisteredThreadComment = {
-      id: 'thread-comments-123',
-      content: '',
-      threadId: '',
-      owner: '',
-    };
+    // const expectedRegisteredThreadComment = {
+    //   id: 'thread-comments-123',
+    //   content: '',
+    //   threadId: '',
+    //   owner: '',
+    // };
 
+    const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
 
     mockThreadCommentRepository.addThreadComment = jest
       .fn()
-      .mockImplementation(() =>
-        Promise.resolve(expectedRegisteredThreadComment)
-      );
+      .mockImplementation(() => Promise.resolve());
 
     const addThreadCommentUseCase = new AddThreadCommentUseCase({
+      threadRepository: mockThreadRepository,
       threadCommentRepository: mockThreadCommentRepository,
     });
 
     // Action & Assert
     await expect(
       addThreadCommentUseCase.execute(useCasePayload)
-    ).rejects.toThrowError();
+    ).rejects.toThrowError('REQUEST_PAYLOAD.NULL');
   });
 
   it('should orchestarting add comment action correctly', async () => {
     // Arrange
+
     const useCasePayload = {
       content: 'comment content',
       threadId: 'thread-123',
@@ -46,8 +52,12 @@ describe('AddThreadCommentUseCase', () => {
       owner: useCasePayload.owner,
     };
 
+    const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
 
+    mockThreadRepository.getThreadDetailById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
     mockThreadCommentRepository.addThreadComment = jest
       .fn()
       .mockImplementation(() =>
@@ -55,21 +65,22 @@ describe('AddThreadCommentUseCase', () => {
       );
 
     const addThreadCommentUseCase = new AddThreadCommentUseCase({
+      threadRepository: mockThreadRepository,
       threadCommentRepository: mockThreadCommentRepository,
     });
 
     // Action & Assert
-    expect(async () =>
-      addThreadCommentUseCase.execute(useCasePayload)
-    ).not.toThrowError();
-    const registeredThreadComment = await addThreadCommentUseCase.execute(
-      useCasePayload
-    );
+    await expect(
+      addThreadCommentUseCase.execute({ ...useCasePayload })
+    ).resolves.not.toThrow(Error);
+    const registeredThreadComment = await addThreadCommentUseCase.execute({
+      ...useCasePayload,
+    });
     expect(registeredThreadComment).toStrictEqual(
       expectedRegisteredThreadComment
     );
-    expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(
-      useCasePayload
-    );
+    expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith({
+      ...useCasePayload,
+    });
   });
 });

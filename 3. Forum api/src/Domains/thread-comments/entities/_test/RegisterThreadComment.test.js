@@ -8,7 +8,7 @@ describe('a RegisterThreadComment entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterThreadComment(payload)).toThrowError(
+    expect(() => new RegisterThreadComment({ ...payload })).toThrowError(
       'REGISTER_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY'
     );
   });
@@ -22,7 +22,7 @@ describe('a RegisterThreadComment entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterThreadComment(payload)).toThrowError(
+    expect(() => new RegisterThreadComment({ ...payload })).toThrowError(
       'REGISTER_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
@@ -36,10 +36,13 @@ describe('a RegisterThreadComment entities', () => {
     };
 
     // Action
-    const { content, owner } = new RegisterThreadComment(payload);
+    const { content, owner, threadId } = new RegisterThreadComment({
+      ...payload,
+    });
 
     // Assert
     expect(content).toEqual(payload.content);
     expect(owner).toEqual(payload.owner);
+    expect(threadId).toEqual(payload.threadId);
   });
 });
