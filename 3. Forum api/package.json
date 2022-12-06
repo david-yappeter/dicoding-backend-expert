@@ -8,6 +8,7 @@
     "build": "babel src -d dist --copy-files",
     "start": "node src/app.js",
     "start:dev": "nodemon src/app.js",
+    "jest-help": "jest --help",
     "jest": "jest --coverage --setupFiles dotenv/config -i",
     "test": "jest --coverage --setupFiles dotenv/config -i",
     "test:watch:change": "jest --watch --setupFiles dotenv/config -i",

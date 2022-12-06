@@ -9,11 +9,10 @@ const ReplyTableTestHelper = {
     thread_comment_id = 'thread-comments-123',
     owner = 'user-123',
     created_at = currentDateIso(),
-    updated_at = currentDateIso(),
   }) {
     const query = {
-      text: 'INSERT INTO replies (id, content, thread_comment_id, owner, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, thread_comment_id, owner, created_at, updated_at,  deleted_at',
-      values: [id, content, thread_comment_id, owner, created_at, updated_at],
+      text: 'INSERT INTO replies (id, content, thread_comment_id, owner, created_at, updated_at, deleted_at) VALUES($1, $2, $3, $4, $5, $5, $6) RETURNING id, content, thread_comment_id, owner, created_at, updated_at, deleted_at',
+      values: [id, content, thread_comment_id, owner, created_at, null],
     };
 
     await pool.query(query);

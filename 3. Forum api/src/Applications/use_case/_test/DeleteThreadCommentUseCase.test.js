@@ -128,9 +128,9 @@ describe('DeleteThreadCommentUseCase', () => {
     });
 
     // Action & Assert
-    expect(async () => {
-      await deleteThreadCommentUseCase.execute(useCasePayload);
-    }).rejects.toThrow(AuthorizationError);
+    await expect(
+      deleteThreadCommentUseCase.execute(useCasePayload)
+    ).rejects.toThrow(AuthorizationError);
   });
 
   it('should orchestrating delete thread action correctly', async () => {

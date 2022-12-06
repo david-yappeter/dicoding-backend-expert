@@ -29,11 +29,15 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getById(replyId) {
     const query = {
-      text: 'SELECT r.*, u.username FROM replies r INNER JOIN users u ON u.id = r.owner WHERE r.id = $1',
+      text: 'SELECT r.*, u.username FROM replies r LEFT JOIN users u ON u.id = r.owner WHERE r.id = $1',
       values: [replyId],
+    };
+    const query2 = {
+      text: 'SELECT * FROM replies',
     };
 
     const result = await this._pool.query(query);
+    const result2 = await this._pool.query(query2);
 
     if (result.rowCount === 0) {
       throw new NotFoundError('reply tidak ditemukan');
@@ -48,7 +52,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     }
 
     const query = {
-      text: `SELECT r.*, r.created_at as date, u.username FROM replies r INNER JOIN users u ON u.id = r.owner WHERE r.thread_comment_id IN (${threadCommentIds
+      text: `SELECT r.*, r.created_at as date, u.username FROM replies r LEFT JOIN users u ON u.id = r.owner WHERE r.thread_comment_id IN (${threadCommentIds
         .map((_, idx) => `$${idx + 1}`)
         .join(',')})
         ORDER BY created_at ASC

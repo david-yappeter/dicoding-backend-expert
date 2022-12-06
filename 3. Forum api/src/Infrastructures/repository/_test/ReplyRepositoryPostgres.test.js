@@ -58,6 +58,10 @@ describe('ReplyRepositoryPostgres', () => {
     pool.end();
   });
 
+  beforeEach(async () => {
+    await ReplyTableTestHelper.cleanTable();
+  });
+
   afterEach(async () => {
     await ReplyTableTestHelper.cleanTable();
   });
@@ -105,9 +109,9 @@ describe('ReplyRepositoryPostgres', () => {
       );
 
       // Action
-      const registeredReply = await replyRepositoryPostgres.addReply(
-        registerReply
-      );
+      const registeredReply = await replyRepositoryPostgres.addReply({
+        ...registerReply,
+      });
 
       // Assert
       expect(registeredReply).toStrictEqual(
@@ -125,7 +129,7 @@ describe('ReplyRepositoryPostgres', () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
-      expect(replyRepositoryPostgres.getById('xxx')).rejects.toThrow(
+      await expect(replyRepositoryPostgres.getById('xxx')).rejects.toThrow(
         NotFoundError
       );
     });
@@ -134,7 +138,7 @@ describe('ReplyRepositoryPostgres', () => {
       // Arrange
       const currentTime = currentDateIso();
       const registerReply = {
-        id: 'reply-123',
+        id: 'reply-1234',
         content: 'Reply Content A',
         thread_comment_id: commentA.id,
         owner: userA.id,
@@ -144,11 +148,12 @@ describe('ReplyRepositoryPostgres', () => {
         username: userA.username,
       };
 
-      await ReplyTableTestHelper.addReply(registerReply);
+      await ReplyTableTestHelper.addReply({ ...registerReply });
+
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
-      expect(
+      await expect(
         replyRepositoryPostgres.getById(registerReply.id)
       ).resolves.toStrictEqual(
         new RegisteredReply({
@@ -223,7 +228,7 @@ describe('ReplyRepositoryPostgres', () => {
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
-      expect(
+      await expect(
         replyRepositoryPostgres.softDeleteById(registerReply.id)
       ).resolves.not.toThrowError();
     });

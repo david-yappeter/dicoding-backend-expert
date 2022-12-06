@@ -26,7 +26,7 @@ describe('AddThreadCommentUseCase', () => {
     });
 
     // Action & Assert
-    expect(async () =>
+    await expect(
       addThreadCommentUseCase.execute(useCasePayload)
     ).rejects.toThrowError();
   });

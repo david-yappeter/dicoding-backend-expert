@@ -43,7 +43,7 @@ describe('ThreadRepositoryPostgres', () => {
       );
 
       // Action
-      await threadRepositoryPostgres.addThread(registerThread);
+      await threadRepositoryPostgres.addThread({ ...registerThread });
 
       // Assert
       const threads = await ThreadTableTestHelper.findThreadById('thread-123');
@@ -67,9 +67,9 @@ describe('ThreadRepositoryPostgres', () => {
       );
 
       // Action
-      const registeredThread = await threadRepositoryPostgres.addThread(
-        registerThread
-      );
+      const registeredThread = await threadRepositoryPostgres.addThread({
+        ...registerThread,
+      });
 
       // Assert
       expect(registeredThread).toStrictEqual(
@@ -85,7 +85,7 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & assert
-      return expect(
+      await expect(
         threadRepositoryPostgres.getThreadDetailById('xxx')
       ).rejects.toThrowError(NotFoundError);
     });
@@ -105,7 +105,7 @@ describe('ThreadRepositoryPostgres', () => {
         updated_at: currentTime,
       };
 
-      await ThreadTableTestHelper.addThread(thread);
+      await ThreadTableTestHelper.addThread({ ...thread });
 
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
@@ -132,9 +132,9 @@ describe('ThreadRepositoryPostgres', () => {
       );
 
       // Action
-      const registeredThread = await threadRepositoryPostgres.addThread(
-        registerThread
-      );
+      const registeredThread = await threadRepositoryPostgres.addThread({
+        ...registerThread,
+      });
 
       // Assert
       expect(registeredThread).toStrictEqual(
@@ -152,7 +152,7 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & assert
-      return expect(
+      await expect(
         threadRepositoryPostgres.getThreadDetailById('xxx')
       ).rejects.toThrowError(NotFoundError);
     });

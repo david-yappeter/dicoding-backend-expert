@@ -58,7 +58,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
         new ThreadCommentRepositoryPostgres(pool, {});
 
       // Action & assert
-      expect(
+      await expect(
         threadCommentRepositoryPostgres.verifyThreadExists('xxx')
       ).rejects.toThrow(NotFoundError);
     });
@@ -69,7 +69,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
         new ThreadCommentRepositoryPostgres(pool, {});
 
       // Action & assert
-      expect(
+      await expect(
         threadCommentRepositoryPostgres.verifyThreadExists(threadA.id)
       ).resolves.not.toThrowError();
     });
@@ -132,7 +132,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
         new ThreadCommentRepositoryPostgres(pool, {});
 
       // Action & Assert
-      expect(() =>
+      await expect(
         threadCommentRepositoryPostgres.getById('xxx')
       ).rejects.toThrow();
     });
@@ -232,7 +232,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
         new ThreadCommentRepositoryPostgres(pool, {});
 
       // Action & Assert
-      expect(
+      await expect(
         threadCommentRepositoryPostgres.softDeleteThreadCommentById(
           threadComment.threadId
         )
